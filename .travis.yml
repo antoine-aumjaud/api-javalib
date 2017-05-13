@@ -1,0 +1,23 @@
+language: java
+jdk:
+  - oraclejdk8
+os:
+  - linux
+
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle/wrapper/dists
+
+before_deploy:
+  - export RELEASE_PKG_FILE=$(ls build/libs/*.jar)
+  - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
+
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+  file: "${RELEASE_PKG_FILE}"
+  on:
+    tags: true
+    repo: antoine-aumjaud/api-javalib
