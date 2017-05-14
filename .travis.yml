@@ -25,4 +25,4 @@ deploy:
   file: "${RELEASE_PKG_FILE}"
   on:
     tags: true
-    repo: antoine-aumjaud/api-syno-chatbot
+    repo: antoine-aumjaud/api-javalib
