@@ -17,7 +17,7 @@ public class TechnicalResource {
 
 	public String info() {
 		return String.format("{\"name\": \"%s\", \"version\":\"%s\"}", //
-				commonProperties.getProperty("application_name"), //
-				commonProperties.getProperty("version"));
+				commonProperties.getProperty("application.name"), //
+				commonProperties.getProperty("application.version"));
 	}
 }
