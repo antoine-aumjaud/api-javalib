@@ -1,27 +1,28 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 os:
-  - linux
+- linux
 
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+  
 before_deploy:
-  - export RELEASE_PKG_FILE=$(ls build/libs/*.jar)
-  - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
+- export RELEASE_PKG_FILE=$(ls build/libs/*.jar)
+- echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 
 deploy:
   skip_cleanup: true
   provider: releases
-  api_key: JXWU7wjIySfptpem+26z9bQFlkJTUGRH/5GhSZDYkgo/v+KY+pi2+/2llVU2/ES/VnGmqEnB/WRkyWzwZpb5+tTNUUnaAiDPqoZGDZfctxK4aKmtStXs/F9Op8RhRDN81zQTvgJe37WhVBmK8dHWrgxJvsXjzE3q3AmRHrxFtroissLr+A5834hX5W8guZtPytzk+PGvVIHL70MhyNublPDzVxNinmSsBumIxLAXoi1nq99wl7lAVjduebwFql8NdYVOGKgO5BOhbL8YC7R37LLezx+RlMFSK2KCOFvHGz4gAbDq334wKNoBRjG6FdesjPmNNNHtdoO/6xlduI05Ql+SPVpO78TV83fdgCrQGd6b0/Xps3PqeQq6qaECrtvBMFahbg1H8ZOFaQ4nueOwUFxjtmXIttDTZOZP6K/ykJhdVzN54Ck4tOgVzplbzE0x7bMY6682T3C+oZ+cciMSA/rzXfizxz2wDfAuymxzu/t12yBlpLgBQn6M5KGBgYHrAwlvyhXoJF0dJH4JB2VYrQ2SXHheLrWN8LBdADRSsDtNks7SfbZeNAkel+6ENdH/KHebbFgsvltsetEepjcowjbP6DqTjzlQx74pN96mARbYnfCQuB9T7QNLZGxdbgEOIjclRDEl1EG2hpp2BPy+bDsBF8jgfWAYYGuGePGCS/s=
+  api_key:
+    secure: pfMQC5ypmdwDT1GKUIpWqRR/IHtCBCd/FBhenSwTMv81scu/x9HRBs1afsz0A6ubkeMYexLet47nnWST+fqn8VAWNN/JbuOwMyCZ4S0jdbFJXAHGTl1l5odM0xCeE27vmYB34ss79MrjZkvss3aNXAiTd4Bm72P2QpjzEUGYpsWaKD9nI9RoKFljTooAFLr3JYbzZXX9s1us9sZ8ussQiv93T5A+1lTtHH4ay2XDU1/35dKlBIegY1xh8D4nBxVqAmSdAMHIO+rtT5XzjeU6qNI0mMvowlfxTuZah5JJ01tS9Z3dJ9hMfeVUs/UKsbKtDWRBLaKUiES15XZ/AgV4FaXC332A7OrhnmX2y+gUTPdth3o/otqNB2W1tniTg++okoUZaXkZAndsDlO9ID+U7KlH9lnMLRTOxWmcoJLB7YRHaOTGJtcXIujrs+PtYNmFEFTvmdl4EUgNej02WCl2ly6L/wW0hdMGZdSUotM1tUTjIp7lBwGpj6cPIvfdrns4vYJndT7Ya5DhS7ShfUd7M2iYtGthFWKMFcc1EpM/L1F5xAXEiA87j00cQlsUXeLf0cw+AbI6nSFN4T6T2uTH6mQq7k2MR2fSA9g4L4hZXRna7ciCkQYs1mbloiZYYH8p+uXmDmB0NSBg76pl8v7EkMTW/B5pGQ/QLcgfni15P+s=
   file: "${RELEASE_PKG_FILE}"
-  on:
-    tags: true
-    repo: antoine-aumjaud/api-javalib
+  tags: true
+  repo: antoine-aumjaud/api-javalib
+  
