@@ -9,10 +9,14 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+    compile('com.sparkjava:spark-core:2.6.0') {
+    	exclude group: 'org.slf4j' //old version
+	}
     compile 'org.slf4j:slf4j-api:1.7.25'
+	compile 'com.google.code.gson:gson:2.8.0'
 }
 
 jar {
     baseName = 'api-javalib'
-    version =  '1.0.0'
+    version =  '1.1.0'
 }
