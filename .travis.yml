@@ -36,4 +36,3 @@ notifications:
       - https://api-synology-chatbot.aumjaud.fr/send-travis/travis-ci
     on_success: always
     on_failure: always
- 
