@@ -26,3 +26,13 @@ deploy:
   on:
     tags: true
     repo: antoine-aumjaud/api-javalib
+    
+notifications:
+  email: 
+    on_failure: always
+    on_sucess: never
+  webhooks:
+    urls:
+	  - http://api-synology-chatbot.aumjaud.fr/secure/send-travis/travis-ci?secure-key=$CHAT_SECURE_KEY
+    on_success: always
+    on_failure: always
