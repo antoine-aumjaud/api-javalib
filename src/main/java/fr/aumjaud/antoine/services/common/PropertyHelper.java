@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 
 public class PropertyHelper {
-	private static Logger logger = LoggerFactory.getLogger(PropertyHelper.class);
+	private static final Logger logger = LoggerFactory.getLogger(PropertyHelper.class);
 
 	public Properties loadProperties(String configFileName) {
 		try (InputStream is = PropertyHelper.class.getClassLoader().getResourceAsStream(configFileName)) {

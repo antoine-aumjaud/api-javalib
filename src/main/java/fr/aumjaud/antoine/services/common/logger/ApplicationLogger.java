@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public class ApplicationLogger {
 	private static ApplicationLogger INSTANCE = new ApplicationLogger();
 
-	private static Logger SECURITY_LOGGER = LoggerFactory.getLogger("SECURITY");
+	private static final Logger SECURITY_LOGGER = LoggerFactory.getLogger("SECURITY");
 
 	public static ApplicationLogger getInstance() {
 		return INSTANCE;

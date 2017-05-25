@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class HttpHelper {
 
-	private static Logger logger = LoggerFactory.getLogger(HttpHelper.class);
+	private static final Logger logger = LoggerFactory.getLogger(HttpHelper.class);
 
 	/**
 	 * POST message to an URL
