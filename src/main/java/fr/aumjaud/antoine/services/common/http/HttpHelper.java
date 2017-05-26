@@ -18,10 +18,8 @@ public class HttpHelper {
 	/**
 	 * POST message to an URL
 	 * 
-	 * @param targetUrl
-	 *            the target URL
-	 * @param message
-	 *            the message to post
+	 * @param targetUrl the target URL
+	 * @param message the message to post
 	 * @return the POST response
 	 */
 	public HttpResponse postData(String targetUrl, String message) {
@@ -51,8 +49,7 @@ public class HttpHelper {
 	/**
 	 * GET message from an URL
 	 * 
-	 * @param targetUrl
-	 *            the target URL
+	 * @param targetUrl the target URL
 	 * @return the GET response
 	 */
 	public HttpResponse getData(String targetUrl) {
