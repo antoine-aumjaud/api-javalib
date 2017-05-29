@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SecurityHelper {
+	public final static  String SECURE_KEY_NAME = "secure-key";
 
 	private static final Logger logger = LoggerFactory.getLogger(SecurityHelper.class);
 

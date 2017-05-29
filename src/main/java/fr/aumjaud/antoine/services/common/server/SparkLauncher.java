@@ -56,8 +56,10 @@ public class SparkLauncher {
 
 			//Manage secure access
 			before("/*", (request, response) -> {
-				String configSecureToken = appProperties.getProperty("secure-key");
-				String requestSecureKey = request.queryParams("secure-key");
+				String configSecureToken = appProperties.getProperty(SecurityHelper.SECURE_KEY_NAME);
+				String requestSecureKey = request.headers(SecurityHelper.SECURE_KEY_NAME);
+				if(requestSecureKey == null)
+					requestSecureKey = request.queryParams(SecurityHelper.SECURE_KEY_NAME);
 				securityHelper.checkAccess(configSecureToken, requestSecureKey);
 			});
 		});

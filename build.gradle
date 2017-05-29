@@ -16,9 +16,10 @@ dependencies {
 	compile 'com.google.code.gson:gson:2.8.0'
 	compile 'org.bouncycastle:bcpkix-jdk15on:1.52'
     testCompile 'junit:junit:4.12'
+    testRuntime 'ch.qos.logback:logback-classic:1.2.3'
 }
 
 jar {
     baseName = 'api-javalib'
-    version =  '1.2.0'
+    version =  '1.3.0'
 }
