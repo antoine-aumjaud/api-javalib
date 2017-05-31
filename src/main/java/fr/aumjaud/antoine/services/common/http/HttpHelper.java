@@ -36,6 +36,7 @@ public class HttpHelper {
 	 * @return the POST response
 	 */
 	public HttpResponse postData(String targetUrl, String message, String secureKey) {
+		logger.debug("Send POST data to {}", targetUrl);
 
 		byte[] postData = message.getBytes(StandardCharsets.UTF_8);
 		try {
@@ -82,6 +83,7 @@ public class HttpHelper {
 	 */
 
 	public HttpResponse getData(String targetUrl, String secureKey) {
+		logger.debug("Send GET data to {}", targetUrl);
 		try {
 			URL url = new URL(targetUrl);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
