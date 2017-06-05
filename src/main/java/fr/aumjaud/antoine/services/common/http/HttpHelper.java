@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +27,9 @@ public class HttpHelper {
 	 * @return the POST response
 	 */
 	public HttpResponse postData(String targetUrl, String message) {
-		return postData(targetUrl, message, null);
+		return postData(targetUrl, message, new HashMap<>());
 	}
+
 	/**
 	 * POST message to an URL
 	 * 
@@ -36,6 +39,20 @@ public class HttpHelper {
 	 * @return the POST response
 	 */
 	public HttpResponse postData(String targetUrl, String message, String secureKey) {
+		Map<String, String> headers = new HashMap<>();
+		headers.put(SecurityHelper.SECURE_KEY_NAME, secureKey);
+		return postData(targetUrl, message, headers);
+	}
+
+	/**
+	 * POST message to an URL
+	 * 
+	 * @param targetUrl the target URL
+	 * @param message the message to post
+	 * @param headers the request headers
+	 * @return the POST response
+	 */
+	public HttpResponse postData(String targetUrl, String message, Map<String, String> headers) {
 		logger.debug("Send POST data to {}", targetUrl);
 
 		byte[] postData = message.getBytes(StandardCharsets.UTF_8);
@@ -48,8 +65,10 @@ public class HttpHelper {
 			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			conn.setRequestProperty("charset", "utf-8");
 			conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
-			if (secureKey != null) {
-				conn.setRequestProperty(SecurityHelper.SECURE_KEY_NAME, secureKey);
+			if (headers != null) {
+				for(Map.Entry<String, String> header : headers.entrySet()) {
+					conn.setRequestProperty(header.getKey(), header.getValue());
+				}
 			}
 			conn.setRequestMethod("POST");
 			try (DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
@@ -71,7 +90,7 @@ public class HttpHelper {
 	 * @return the GET response
 	 */
 	public HttpResponse getData(String targetUrl) {
-		return getData(targetUrl, null);
+		return getData(targetUrl, new HashMap<>());
 	}
 
 	/**
@@ -81,8 +100,20 @@ public class HttpHelper {
 	 * @param secureKey the secure-key token (send in header)
 	 * @return the GET response
 	 */
-
 	public HttpResponse getData(String targetUrl, String secureKey) {
+		Map<String, String> headers = new HashMap<>();
+		headers.put(SecurityHelper.SECURE_KEY_NAME, secureKey);
+		return getData(targetUrl, headers);
+	}
+
+	/**
+	 * GET message from an URL
+	 * 
+	 * @param targetUrl the target URL
+	 * @param headers the request headers
+	 * @return the GET response
+	 */
+	public HttpResponse getData(String targetUrl, Map<String, String> headers) {
 		logger.debug("Send GET data to {}", targetUrl);
 		try {
 			URL url = new URL(targetUrl);
@@ -90,8 +121,10 @@ public class HttpHelper {
 			conn.setInstanceFollowRedirects(false);
 			conn.setUseCaches(false);
 			conn.setRequestProperty("charset", "utf-8");
-			if (secureKey != null) {
-				conn.setRequestProperty(SecurityHelper.SECURE_KEY_NAME, secureKey);
+			if (headers != null) {
+				for(Map.Entry<String, String> header : headers.entrySet()) {
+					conn.setRequestProperty(header.getKey(), header.getValue());
+				}
 			}
 			conn.setRequestMethod("GET");
 			StringBuilder result = new StringBuilder();
@@ -107,5 +140,4 @@ public class HttpHelper {
 		}
 		return null;
 	}
-
 }
