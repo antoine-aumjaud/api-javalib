@@ -3,7 +3,7 @@ package fr.aumjaud.antoine.services.common.http;
 import java.util.HashMap;
 import java.util.Map;
 
-class HttpMessage {
+public class HttpMessage {
     private String url, message;
     private boolean isJson;
     private Map<String, String> headers = new HashMap<>();
