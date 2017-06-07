@@ -41,13 +41,16 @@ public class HttpHelper {
 			}
 			conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
 			conn.setRequestMethod("POST");
+			//Write POST data
 			try (DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
 				dos.write(postData);
-				return new HttpResponse(conn.getResponseCode(), conn.getResponseMessage());
 			} 
+			//Read reponse
+			String resultContent = getResultContent(conn);
+			return new HttpResponse(conn.getResponseCode(), conn.getResponseMessage(), resultContent);
 		} catch (IOException e) {
 			logger.error("Can't do a POST", e);
-			return new HttpResponse(HttpCode.SERVER_ERROR.getCode(), "Can't call server");
+			return new HttpResponse(HttpCode.SERVER_ERROR.getCode(), "SERVER ERROR", "Can't call server");
 		}
 	}
 
@@ -64,22 +67,38 @@ public class HttpHelper {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setInstanceFollowRedirects(false);
 			conn.setUseCaches(false);
-			conn.setRequestProperty("charset", "utf-8");
 			for(Map.Entry<String, String> header : httpMessage.getHeaders().entrySet()) {
 				conn.setRequestProperty(header.getKey(), header.getValue());
 			}
 			conn.setRequestMethod("GET");
-			StringBuilder result = new StringBuilder();
-			try (BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-				String line;
-				while ((line = rd.readLine()) != null) {
-					result.append(line);
-				}
-			}
-			return new HttpResponse(conn.getResponseCode(), result.toString());
+			//Read reponse
+			String resultContent = getResultContent(conn);
+			return new HttpResponse(conn.getResponseCode(), conn.getResponseMessage(), resultContent);
 		} catch (IOException e) {
 			logger.error("Can't do a GET", e);
-			return new HttpResponse(HttpCode.SERVER_ERROR.getCode(), "Can't call server");
+			return new HttpResponse(HttpCode.SERVER_ERROR.getCode(), "SERVER ERROR", "Can't call server");
 		}
+	}
+
+
+	/*
+	 * PRIVATE
+	 */
+
+	/**
+	 * Return the response of an HttpURLConnection in a String
+	 * 
+	 * @param conn the connection
+	 * @return the response message in a String
+	 */
+	private String getResultContent(HttpURLConnection conn) throws IOException {
+		StringBuilder result = new StringBuilder();
+		try (BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+			String line;
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+		}
+		return result.toString();
 	}
 }

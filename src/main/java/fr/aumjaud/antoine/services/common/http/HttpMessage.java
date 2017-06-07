@@ -8,6 +8,9 @@ public class HttpMessage {
     private boolean isJson;
     private Map<String, String> headers = new HashMap<>();
     
+    //Limit access to constructor of this class
+    HttpMessage() {}
+
     public void setUrl(String url) {
         this.url = url;
     }

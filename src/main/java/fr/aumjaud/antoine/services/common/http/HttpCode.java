@@ -2,7 +2,14 @@ package fr.aumjaud.antoine.services.common.http;
 
 public enum HttpCode {
 	OK(200),
-	SERVER_ERROR(500);
+	
+	UNAUTHORIZE(401),
+	FORBIDDEN(403),
+	NOT_FOUND(404),
+	
+	SERVER_ERROR(500),
+	
+	UNDEFINED(-1);
 
 	private final int code;
 
@@ -18,7 +25,7 @@ public enum HttpCode {
 		for (HttpCode httpCode : HttpCode.values())
 			if (httpCode.getCode() == code)
 				return httpCode;
-		return null;
+		return UNDEFINED;
 	}
 
 }
