@@ -1,7 +1,8 @@
 package fr.aumjaud.antoine.services.common.http;
 
 public enum HttpCode {
-	OK(200);
+	OK(200),
+	SERVER_ERROR(500);
 
 	private final int code;
 
