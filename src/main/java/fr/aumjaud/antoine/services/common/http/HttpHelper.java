@@ -16,6 +16,33 @@ public class HttpHelper {
 
 	private static final Logger logger = LoggerFactory.getLogger(HttpHelper.class);
 
+	/**
+	 * POST message to an URL
+	 * 
+	 * @param url the target URL
+	 * @param message the message to send
+	 * @return the GET response
+	 */
+	public HttpResponse postData(String url, String message) {
+		return postData(new HttpMessageBuilder(url)
+			.setMessage(message)
+			.build());
+	}
+	
+	/**
+	 * POST message to an URL
+	 * 
+	 * @param url the target URL
+	 * @param message the message to send
+	 * @param secureKey the secretKey to call this service 
+	 * @return the GET response
+	 */
+	public HttpResponse postData(String url, String secureKey, String message) {
+		return postData(new HttpMessageBuilder(url)
+			.setSecureKey(secureKey)
+			.setMessage(message)
+			.build());
+	}
 	
 	/**
 	 * POST message to an URL
@@ -52,6 +79,30 @@ public class HttpHelper {
 			logger.error("Can't do a POST", e);
 			return new HttpResponse(HttpCode.SERVER_ERROR.getCode(), "SERVER ERROR", "Can't call server");
 		}
+	}
+
+	/**
+	 * GET message from an URL
+	 * 
+	 * @param url the target URL
+	 * @return the GET response
+	 */
+	public HttpResponse getData(String url) {
+		return getData(new HttpMessageBuilder(url)
+			.build());
+	}
+	
+	/**
+	 * GET message from an URL
+	 * 
+	 * @param url the target URL
+	 * @param secureKey the secretKey to call this service 
+	 * @return the GET response
+	 */
+	public HttpResponse getData(String url, String secureKey) {
+		return getData(new HttpMessageBuilder(url)
+			.setSecureKey(secureKey)
+			.build());
 	}
 
 	/**

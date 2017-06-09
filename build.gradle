@@ -21,7 +21,7 @@ dependencies {
 
 jar {
     baseName = 'api-javalib'
-    version =  '1.6.2'
+    version =  '1.6.3'
 }
 
 task wrapper(type: Wrapper) {
