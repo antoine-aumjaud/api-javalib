@@ -85,11 +85,12 @@ public class SparkLauncher {
 	}
 	
 	private class Info {
-		private final String name, version;
+		private final String name, version, buildDate;
 
 		public Info() {
 			this.name = commonProperties.getProperty("application.name");
 			this.version = commonProperties.getProperty("application.version");
+			this.buildDate = commonProperties.getProperty("build.date");
 		}
 
 		@SuppressWarnings("unused") //by gson
@@ -100,6 +101,11 @@ public class SparkLauncher {
 		@SuppressWarnings("unused") //by gson
 		public String getVersion() {
 			return version;
+		}
+
+		@SuppressWarnings("unused") //by gson
+		public String getBuildDate() {
+			return buildDate;
 		}
 	}
 }
