@@ -21,7 +21,7 @@ public class HttpHelper {
 	 * 
 	 * @param url the target URL
 	 * @param message the message to send
-	 * @return the GET response
+	 * @return the POST response
 	 */
 	public HttpResponse postData(String url, String message) {
 		return postData(new HttpMessageBuilder(url)
@@ -35,7 +35,7 @@ public class HttpHelper {
 	 * @param url the target URL
 	 * @param message the message to send
 	 * @param secureKey the secretKey to call this service 
-	 * @return the GET response
+	 * @return the POST response
 	 */
 	public HttpResponse postData(String url, String secureKey, String message) {
 		return postData(new HttpMessageBuilder(url)
