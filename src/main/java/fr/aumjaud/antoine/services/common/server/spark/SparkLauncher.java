@@ -43,7 +43,7 @@ public class SparkLauncher {
 
 		//Common method
 		get("/hi", (request, response) -> "hello");
-		get("/info", "application/json", (request, response) -> new Info(), gson::toJson);
+		get("/info", "application/json", (request, response) -> new ServerInfo(commonProperties), gson::toJson);
 
 		//Enter in secure paths
 		path("/secure", () -> {
@@ -82,30 +82,5 @@ public class SparkLauncher {
 	private void loadAppProperties() {
 		appProperties = propertyHelper.loadProperties(sparkImplementation.getAppConfigName());
 		sparkImplementation.setConfig(appProperties);
-	}
-	
-	private class Info {
-		private final String name, version, buildDate;
-
-		public Info() {
-			this.name = commonProperties.getProperty("application.name");
-			this.version = commonProperties.getProperty("application.version");
-			this.buildDate = commonProperties.getProperty("build.date");
-		}
-
-		@SuppressWarnings("unused") //by gson
-		public String getName() {
-			return name;
-		}
-
-		@SuppressWarnings("unused") //by gson
-		public String getVersion() {
-			return version;
-		}
-
-		@SuppressWarnings("unused") //by gson
-		public String getBuildDate() {
-			return buildDate;
-		}
 	}
 }

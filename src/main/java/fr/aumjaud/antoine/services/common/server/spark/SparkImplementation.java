@@ -21,7 +21,7 @@ public interface SparkImplementation {
 
 	/**
 	 * Specific part of spark initialization for this application
-	 * @param securePath
+	 * @param securePath the path of secured services
 	 */
 	void initSpark(String securePath);
 
