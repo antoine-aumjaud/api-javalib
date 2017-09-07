@@ -36,4 +36,19 @@ public class HttpMessage {
     public Map<String, String> getHeaders() {
         return headers;
     }
+
+    public String getCurlCommand() {
+        StringBuilder command = new StringBuilder();
+        command.append("curl");
+        if(isJson) {
+            command.append(" -H 'Content-Type: application/json; charset=utf-8'");
+        } else {
+            command.append(" -H 'Content-Type: application/x-www-form-urlencoded; charset=utf-8'");
+        }
+        for(Map.Entry<String, String> header : headers.entrySet()) {
+            command.append(" -H '").append(header.getKey()).append(": ").append(header.getValue()).append("'");    
+        }
+        command.append(" -d '").append(message).append("' '").append(url).append("'");
+        return command.toString();
+    }
 }

@@ -52,6 +52,9 @@ public class HttpHelper {
 	 */
 	public HttpResponse postData(HttpMessage httpMessage) {
 		logger.debug("Send POST data to {}", httpMessage.getUrl());
+		if(logger.isTraceEnabled()) {
+			logger.trace(httpMessage.getCurlCommand());
+		}
 
 		byte[] postData = httpMessage.getMessage().getBytes(StandardCharsets.UTF_8);
 		try {
@@ -113,6 +116,10 @@ public class HttpHelper {
 	 */
 	public HttpResponse getData(HttpMessage httpMessage) {
 		logger.debug("Send GET data to {}", httpMessage.getUrl());
+		if(logger.isTraceEnabled()) {
+			logger.trace(httpMessage.getCurlCommand());
+		}
+		
 		try {
 			URL url = new URL(httpMessage.getUrl());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
