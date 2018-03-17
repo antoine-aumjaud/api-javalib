@@ -20,6 +20,12 @@ public interface SparkImplementation {
 	String getAppConfigName();
 
 	/**
+	 * Return the name the application
+	 * @return the name the application
+	 */
+	String getApiName();
+
+	/**
 	 * Specific part of spark initialization for this application
 	 * @param securePath the path of secured services
 	 */

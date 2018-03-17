@@ -56,11 +56,22 @@ public class SparkLauncher {
 
 			//Manage secure access
 			before("/*", (request, response) -> {
-				String configSecureToken = appProperties.getProperty(SecurityHelper.SECURE_KEY_NAME);
 				String requestSecureKey = request.headers(SecurityHelper.SECURE_KEY_NAME);
-				if(requestSecureKey == null)
+				String requestAuthorization = request.headers(SecurityHelper.AUTHORIZATION_HEADER);
+				if(requestSecureKey == null) {
 					requestSecureKey = request.queryParams(SecurityHelper.SECURE_KEY_NAME);
-				securityHelper.checkAccess(configSecureToken, requestSecureKey);
+				}
+	
+				if(requestSecureKey != null) {
+					String configSecureToken = appProperties.getProperty(SecurityHelper.SECURE_KEY_NAME);
+					securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKey);
+				}
+				else if(requestAuthorization != null) {
+					String token = requestAuthorization.substring(requestAuthorization.indexOf("Bearer") + 7);
+                    securityHelper.checkJWTAccess(token, sparkImplementation.getApiName());
+				} else {
+					throw new NoAccessException("no credentials", "Try to access to API without credentials");
+				}
 			});
 		});
 
