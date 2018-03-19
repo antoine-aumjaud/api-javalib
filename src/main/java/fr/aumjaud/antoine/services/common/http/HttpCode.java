@@ -2,6 +2,8 @@ package fr.aumjaud.antoine.services.common.http;
 
 public enum HttpCode {
 	OK(200),
+	CREATED(201),
+	NO_CONTENT(204),
 	
 	UNAUTHORIZE(401),
 	FORBIDDEN(403),
@@ -19,6 +21,10 @@ public enum HttpCode {
 
 	public int getCode() {
 		return code;
+	}
+
+	public boolean isASucessCode() {
+		return code >= 200 && code < 299;
 	}
 
 	public static HttpCode valueOf(int code) {
