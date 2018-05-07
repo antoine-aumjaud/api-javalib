@@ -1,4 +1,4 @@
-package fr.aumjaud.antoine.services.common.server;
+package fr.aumjaud.antoine.services.common.server.spark;
 
 import java.util.Properties;
 

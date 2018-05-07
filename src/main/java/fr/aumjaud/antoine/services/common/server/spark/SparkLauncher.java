@@ -1,4 +1,4 @@
-package fr.aumjaud.antoine.services.common.server;
+package fr.aumjaud.antoine.services.common.server.spark;
 
 import static spark.Spark.before;
 import static spark.Spark.exception;
@@ -15,6 +15,7 @@ import fr.aumjaud.antoine.services.common.logger.ApplicationLogger;
 import fr.aumjaud.antoine.services.common.security.NoAccessException;
 import fr.aumjaud.antoine.services.common.security.SecurityHelper;
 import fr.aumjaud.antoine.services.common.security.WrongRequestException;
+import fr.aumjaud.antoine.services.common.server.ServerInfo;
 
 /**
  * Launch a Spark server with default services
@@ -42,6 +43,9 @@ public class SparkLauncher {
 		port(9080);
 
 		//Common method
+		before("/*", (request, response) -> {
+			response.header("Access-Control-Allow-Origin", "*");
+		});
 		get("/hi", (request, response) -> "hello");
 		get("/info", "application/json", (request, response) -> new ServerInfo(commonProperties), gson::toJson);
 
