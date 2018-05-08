@@ -39,9 +39,17 @@ public class SecureFilter implements Filter {
 
         //Add CORS
         response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization");
 
+        //Manage OPTIONS method from browsers
+        if(request.getMethod().equalsIgnoreCase("OPTIONS")) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+        
         //Check Secure info
-        if (request.getRequestURI().startsWith("/secure/")) {
+        if(request.getRequestURI().startsWith("/secure/")) {
             String requestSecureKey = request.getHeader(SecurityHelper.SECURE_KEY_NAME);
             if (requestSecureKey == null) {
                 requestSecureKey = request.getParameter(SecurityHelper.SECURE_KEY_NAME);
@@ -63,7 +71,7 @@ public class SecureFilter implements Filter {
 
             throw new NoAccessException("no credentials", "Try to access to API without credentials");
         }
-        
+
         //Pass through
         chain.doFilter(req, res);
     }
