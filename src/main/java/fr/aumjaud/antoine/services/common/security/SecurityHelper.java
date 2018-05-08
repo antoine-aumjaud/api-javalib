@@ -2,7 +2,6 @@ package fr.aumjaud.antoine.services.common.security;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -26,18 +25,15 @@ import java.security.Security;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.Base64;
-import java.util.Map;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SecurityHelper {
 	public final static  String SECURE_KEY_NAME = "secure-key";
 	public final static  String AUTHORIZATION_HEADER = "Authorization";
 
-	private static final Logger logger = LoggerFactory.getLogger(SecurityHelper.class);
+	//private static final Logger logger = LoggerFactory.getLogger(SecurityHelper.class);
 
 	static {
 		Security.addProvider(new BouncyCastleProvider());
