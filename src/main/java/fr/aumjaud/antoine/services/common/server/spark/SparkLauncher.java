@@ -45,6 +45,8 @@ public class SparkLauncher {
 		//Common method
 		before("/*", (request, response) -> {
 			response.header("Access-Control-Allow-Origin", "*");
+			response.header("Access-Control-Allow-Credentials", "true");
+			response.header("Access-Control-Allow-Headers", "Authorization");
 		});
 		get("/hi", (request, response) -> "hello");
 		get("/info", "application/json", (request, response) -> new ServerInfo(commonProperties), gson::toJson);
