@@ -1,9 +1,10 @@
 package fr.aumjaud.antoine.services.common.server.spark;
 
 import static spark.Spark.before;
-import static spark.Spark.options;
 import static spark.Spark.exception;
 import static spark.Spark.get;
+import static spark.Spark.halt;
+import static spark.Spark.options;
 import static spark.Spark.path;
 import static spark.Spark.port;
 
@@ -54,7 +55,7 @@ public class SparkLauncher {
 		options("/*", (request, response) -> {
 			//Manage OPTIONS method from browsers
 			response.header("Access-Control-Max-Age", "86400");
-			response.status(200);
+			halt(200); //do not execute other filters
 			return "";
 		});
 		get("/hi", (request, response) -> "hello");
