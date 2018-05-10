@@ -1,9 +1,10 @@
 package fr.aumjaud.antoine.services.common.server.spark;
 
 import static spark.Spark.before;
-import static spark.Spark.options;
 import static spark.Spark.exception;
 import static spark.Spark.get;
+import static spark.Spark.halt;
+import static spark.Spark.options;
 import static spark.Spark.path;
 import static spark.Spark.port;
 
@@ -43,20 +44,21 @@ public class SparkLauncher {
 		//Define listening port
 		port(9080);
 
-		//Common method
-
 		//Add CORS
 		before("/*", (request, response) -> {
 			response.header("Access-Control-Allow-Origin", "*");
 			response.header("Access-Control-Allow-Credentials", "true");
 			response.header("Access-Control-Allow-Headers", "Authorization");
 		});
+
+		//Manage OPTIONS method from browsers
 		options("/*", (request, response) -> {
-			//Manage OPTIONS method from browsers
 			response.header("Access-Control-Max-Age", "86400");
 			response.status(200);
 			return "";
 		});
+		
+		//Common method
 		get("/hi", (request, response) -> "hello");
 		get("/info", "application/json", (request, response) -> new ServerInfo(commonProperties), gson::toJson);
 
@@ -71,6 +73,8 @@ public class SparkLauncher {
 
 			//Manage secure access
 			before("/*", (request, response) -> {
+				if(request.requestMethod().equals("OPTIONS")) return; //do not check params for OPTIONS request
+
 				String requestSecureKey = request.headers(SecurityHelper.SECURE_KEY_NAME);
 				String requestAuthorization = request.headers(SecurityHelper.AUTHORIZATION_HEADER);
 				if(requestSecureKey == null) {
