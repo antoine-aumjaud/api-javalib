@@ -1,6 +1,7 @@
 package fr.aumjaud.antoine.services.common.server.spark;
 
 import static spark.Spark.before;
+import static spark.Spark.options;
 import static spark.Spark.exception;
 import static spark.Spark.get;
 import static spark.Spark.path;
@@ -43,10 +44,18 @@ public class SparkLauncher {
 		port(9080);
 
 		//Common method
+
+		//Add CORS
 		before("/*", (request, response) -> {
 			response.header("Access-Control-Allow-Origin", "*");
 			response.header("Access-Control-Allow-Credentials", "true");
 			response.header("Access-Control-Allow-Headers", "Authorization");
+		});
+		options("/*", (request, response) -> {
+			//Manage OPTIONS method from browsers
+			response.header("Access-Control-Max-Age", "86400");
+			response.status(200);
+			return "";
 		});
 		get("/hi", (request, response) -> "hello");
 		get("/info", "application/json", (request, response) -> new ServerInfo(commonProperties), gson::toJson);

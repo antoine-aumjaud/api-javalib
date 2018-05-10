@@ -44,6 +44,7 @@ public class SecureFilter implements Filter {
 
         //Manage OPTIONS method from browsers
         if(request.getMethod().equalsIgnoreCase("OPTIONS")) {
+            response.setHeader("Access-Control-Max-Age", "86400");
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
