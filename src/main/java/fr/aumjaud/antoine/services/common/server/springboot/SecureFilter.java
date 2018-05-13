@@ -40,7 +40,7 @@ public class SecureFilter implements Filter {
         //Add CORS
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 
         //Manage OPTIONS method from browsers
         if(request.getMethod().equalsIgnoreCase("OPTIONS")) {

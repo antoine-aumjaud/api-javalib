@@ -48,7 +48,7 @@ public class SparkLauncher {
 		before("/*", (request, response) -> {
 			response.header("Access-Control-Allow-Origin", "*");
 			response.header("Access-Control-Allow-Credentials", "true");
-			response.header("Access-Control-Allow-Headers", "Authorization");
+			response.header("Access-Control-Allow-Headers", "Authorization, Content-Type");
 		});
 
 		//Manage OPTIONS method from browsers
