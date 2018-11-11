@@ -9,6 +9,7 @@ import static spark.Spark.path;
 import static spark.Spark.port;
 
 import java.util.Properties;
+import java.util.Base64;
 
 import com.google.gson.Gson;
 
@@ -75,22 +76,34 @@ public class SparkLauncher {
 			before("/*", (request, response) -> {
 				if(request.requestMethod().equals("OPTIONS")) return; //do not check params for OPTIONS request
 
-				String requestSecureKey = request.headers(SecurityHelper.SECURE_KEY_NAME);
+				String configSecureToken = appProperties.getProperty(SecurityHelper.SECURE_KEY_NAME);
 				String requestAuthorization = request.headers(SecurityHelper.AUTHORIZATION_HEADER);
-				if(requestSecureKey == null) {
-					requestSecureKey = request.queryParams(SecurityHelper.SECURE_KEY_NAME);
+				if(requestAuthorization != null) {
+					if(requestAuthorization.startsWith("Basic")) {
+						String requestSecureKeyAuthHeader = new String(Base64.getDecoder().decode(requestAuthorization.substring(6 /* "Basic".length */)), "UTF-8");
+						requestSecureKeyAuthHeader = requestSecureKeyAuthHeader.substring(0, requestSecureKeyAuthHeader.length() - 1); //remove ":" separator between username and password
+						securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyAuthHeader);
+						return;
+					}
+					else if(requestAuthorization.startsWith("Bearer"))  {
+						String requestTokenAuthHeader = requestAuthorization.substring(7 /* "Bearer".length */);
+						securityHelper.checkJWTAccess(requestTokenAuthHeader, sparkImplementation.getApiName());
+						return;
+					}
 				}
-	
-				if(requestSecureKey != null) {
-					String configSecureToken = appProperties.getProperty(SecurityHelper.SECURE_KEY_NAME);
-					securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKey);
+
+				String requestSecureKeyHeader = request.headers(SecurityHelper.SECURE_KEY_NAME);
+				if(requestSecureKeyHeader != null) {
+					securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyHeader);
+					return;
 				}
-				else if(requestAuthorization != null) {
-					String token = requestAuthorization.substring(requestAuthorization.indexOf("Bearer") + 7);
-                    securityHelper.checkJWTAccess(token, sparkImplementation.getApiName());
-				} else {
-					throw new NoAccessException("no credentials", "Try to access to API without credentials");
+				String requestSecureKeyParam  = request.queryParams(SecurityHelper.SECURE_KEY_NAME);
+				if(requestSecureKeyParam != null) {
+					securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyParam);
+					return;
 				}
+
+				throw new NoAccessException("no credentials", "Try to access to API without credentials");
 			});
 		});
 

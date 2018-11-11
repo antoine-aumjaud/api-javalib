@@ -1,6 +1,7 @@
 package fr.aumjaud.antoine.services.common.server.springboot;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -51,23 +52,35 @@ public class SecureFilter implements Filter {
         
         //Check Secure info
         if(request.getRequestURI().startsWith("/secure/")) {
-            String requestSecureKey = request.getHeader(SecurityHelper.SECURE_KEY_NAME);
-            if (requestSecureKey == null) {
-                requestSecureKey = request.getParameter(SecurityHelper.SECURE_KEY_NAME);
-            }
-            if(requestSecureKey != null) {
-                String configSecureToken = applicationConfig.getSecureKey();
-                securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKey);
-                chain.doFilter(req, res);
-                return;
-            }
-
+            String configSecureToken = applicationConfig.getSecureKey();
             String requestAuthorization = request.getHeader(SecurityHelper.AUTHORIZATION_HEADER);
             if(requestAuthorization != null) {
-                String token = requestAuthorization.substring(requestAuthorization.indexOf("Bearer") + 7);
-                securityHelper.checkJWTAccess(token, apiName);
+                if(requestAuthorization.startsWith("Basic")) {
+                    String requestSecureKeyAuthHeader = new String(Base64.getDecoder().decode(requestAuthorization.substring(6 /* "Basic".length */)), "UTF-8");
+                    requestSecureKeyAuthHeader = requestSecureKeyAuthHeader.substring(0, requestSecureKeyAuthHeader.length() - 1); //remove ":" separator between username and password
+                    securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyAuthHeader);
+                    chain.doFilter(req, res);
+                    return;
+                }
+                else if(requestAuthorization.startsWith("Bearer"))  {
+                    String requestTokenAuthHeader = requestAuthorization.substring(7 /* "Bearer".length */);
+                    securityHelper.checkJWTAccess(requestTokenAuthHeader, apiName);
+                    chain.doFilter(req, res);
+                    return;
+                }
+            }
+
+            String requestSecureKeyHeader = request.getHeader(SecurityHelper.SECURE_KEY_NAME);
+            if(requestSecureKeyHeader != null) {
+                securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyHeader);
                 chain.doFilter(req, res);
                 return;
+            }
+            String requestSecureKeyParam = request.getParameter(SecurityHelper.SECURE_KEY_NAME);
+            if (requestSecureKeyParam == null) {
+                securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyParam);
+                chain.doFilter(req, res);
+                return;            
             }
 
             throw new NoAccessException("no credentials", "Try to access to API without credentials");
