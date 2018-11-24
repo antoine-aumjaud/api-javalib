@@ -13,6 +13,9 @@ import java.util.Base64;
 
 import com.google.gson.Gson;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.aumjaud.antoine.services.common.PropertyHelper;
 import fr.aumjaud.antoine.services.common.logger.ApplicationLogger;
 import fr.aumjaud.antoine.services.common.security.NoAccessException;
@@ -26,6 +29,8 @@ import fr.aumjaud.antoine.services.common.server.ServerInfo;
 public class SparkLauncher {
 
 	private final static String COMMON_CONFIG_FILENAME = "common.properties";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SparkLauncher.class);
 
 	private final PropertyHelper propertyHelper = new PropertyHelper();
 	private final SecurityHelper securityHelper = new SecurityHelper();
@@ -118,7 +123,12 @@ public class SparkLauncher {
 			response.status(412);
 			response.body("wrong request: " + e.getClientMessage());
 		});
-		
+		exception(Exception.class, (e, request, response) -> {
+			LOGGER.error("Unhandled exception returned to client", e);
+			response.status(500);
+			response.body("internal server error, see server logs");
+		});
+	
 		sparkImplementation.initSpark("/secure");
 	}
 
