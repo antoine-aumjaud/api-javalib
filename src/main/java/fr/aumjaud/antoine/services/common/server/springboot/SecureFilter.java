@@ -77,7 +77,7 @@ public class SecureFilter implements Filter {
                 return;
             }
             String requestSecureKeyParam = request.getParameter(SecurityHelper.SECURE_KEY_NAME);
-            if (requestSecureKeyParam == null) {
+            if (requestSecureKeyParam != null) {
                 securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyParam);
                 chain.doFilter(req, res);
                 return;            
