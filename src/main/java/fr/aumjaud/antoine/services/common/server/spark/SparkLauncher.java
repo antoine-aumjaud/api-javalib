@@ -82,6 +82,18 @@ public class SparkLauncher {
 				if(request.requestMethod().equals("OPTIONS")) return; //do not check params for OPTIONS request
 
 				String configSecureToken = appProperties.getProperty(SecurityHelper.SECURE_KEY_NAME);
+
+				String requestSecureKeyHeader = request.headers(SecurityHelper.SECURE_KEY_NAME);
+				if(requestSecureKeyHeader != null) {
+					securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyHeader);
+					return;
+				}
+				String requestSecureKeyParam  = request.queryParams(SecurityHelper.SECURE_KEY_NAME);
+				if(requestSecureKeyParam != null) {
+					securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyParam);
+					return;
+				}
+
 				String requestAuthorization = request.headers(SecurityHelper.AUTHORIZATION_HEADER);
 				if(requestAuthorization != null) {
 					if(requestAuthorization.startsWith("Basic")) {
@@ -95,17 +107,6 @@ public class SparkLauncher {
 						securityHelper.checkJWTAccess(requestTokenAuthHeader, sparkImplementation.getApiName());
 						return;
 					}
-				}
-
-				String requestSecureKeyHeader = request.headers(SecurityHelper.SECURE_KEY_NAME);
-				if(requestSecureKeyHeader != null) {
-					securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyHeader);
-					return;
-				}
-				String requestSecureKeyParam  = request.queryParams(SecurityHelper.SECURE_KEY_NAME);
-				if(requestSecureKeyParam != null) {
-					securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyParam);
-					return;
 				}
 
 				throw new NoAccessException("no credentials", "Try to access to API without credentials");

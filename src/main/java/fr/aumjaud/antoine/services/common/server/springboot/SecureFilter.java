@@ -53,6 +53,20 @@ public class SecureFilter implements Filter {
         //Check Secure info
         if(request.getRequestURI().startsWith("/secure/")) {
             String configSecureToken = applicationConfig.getSecureKey();
+
+            String requestSecureKeyHeader = request.getHeader(SecurityHelper.SECURE_KEY_NAME);
+            if(requestSecureKeyHeader != null) {
+                securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyHeader);
+                chain.doFilter(req, res);
+                return;
+            }
+            String requestSecureKeyParam = request.getParameter(SecurityHelper.SECURE_KEY_NAME);
+            if (requestSecureKeyParam != null) {
+                securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyParam);
+                chain.doFilter(req, res);
+                return;            
+            }
+
             String requestAuthorization = request.getHeader(SecurityHelper.AUTHORIZATION_HEADER);
             if(requestAuthorization != null) {
                 if(requestAuthorization.startsWith("Basic")) {
@@ -68,19 +82,6 @@ public class SecureFilter implements Filter {
                     chain.doFilter(req, res);
                     return;
                 }
-            }
-
-            String requestSecureKeyHeader = request.getHeader(SecurityHelper.SECURE_KEY_NAME);
-            if(requestSecureKeyHeader != null) {
-                securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyHeader);
-                chain.doFilter(req, res);
-                return;
-            }
-            String requestSecureKeyParam = request.getParameter(SecurityHelper.SECURE_KEY_NAME);
-            if (requestSecureKeyParam != null) {
-                securityHelper.checkSecureKeyAccess(configSecureToken, requestSecureKeyParam);
-                chain.doFilter(req, res);
-                return;            
             }
 
             throw new NoAccessException("no credentials", "Try to access to API without credentials");
