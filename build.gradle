@@ -47,5 +47,5 @@ dependencies {
 
 tasks.named('jar') {
     archiveBaseName = 'api-javalib'
-    archiveVersion = '1.14.1'
+    archiveVersion = '1.15.1'
 }
