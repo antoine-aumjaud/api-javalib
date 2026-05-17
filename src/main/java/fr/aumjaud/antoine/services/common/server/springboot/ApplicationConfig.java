@@ -3,8 +3,8 @@ package fr.aumjaud.antoine.services.common.server.springboot;
 
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
-import javax.validation.constraints.NotNull;
+import jakarta.annotation.PostConstruct;
+import jakarta.validation.constraints.NotNull;
 
 import fr.aumjaud.antoine.services.common.PropertyHelper;
 import fr.aumjaud.antoine.services.common.security.SecurityHelper;
