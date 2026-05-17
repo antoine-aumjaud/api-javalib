@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: ${{ startsWith(github.ref, 'refs/tags/') && 'java build (release)' || 'java build' }}
+    name: ${{ startsWith(github.ref, 'refs/tags/') && 'java build (release)' || format('java build ({0})', github.event.head_commit.message) }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -24,7 +24,11 @@ jobs:
         cache: 'gradle'
 
     - name: Build and test
-      run: ./gradlew clean build
+      # --no-daemon: daemon is useless on CI (fresh env each run)
+      # JAVA_TOOL_OPTIONS: suppress native access warning from Gradle's native-platform on Java 25+
+      run: ./gradlew --no-daemon clean build
+      env:
+        JAVA_TOOL_OPTIONS: --enable-native-access=ALL-UNNAMED
 
     - name: Publish JAR to GitHub Release
       if: startsWith(github.ref, 'refs/tags/')
