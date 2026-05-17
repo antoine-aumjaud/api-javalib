@@ -1,38 +1,39 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+}
 
 repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
 
 dependencies {
-    //sparkserver
-    compile('com.sparkjava:spark-core:2.6.0') {
+    // Spark server
+    implementation('com.sparkjava:spark-core:2.6.0') {
     	exclude group: 'org.slf4j' //old version
 	}
-    //spring (context -> bean -> core)
-	compile('org.springframework.boot:spring-boot-starter-web:1.5.4.RELEASE') {
+    // Spring (context -> bean -> core)
+	implementation('org.springframework.boot:spring-boot-starter-web:1.5.4.RELEASE') {
         exclude group: 'commons-logging' //useless with slf4j
     }
 
-    //common
-    compile 'org.slf4j:slf4j-api:1.7.25'
-	compile 'com.google.code.gson:gson:2.8.0'
-	compile 'org.bouncycastle:bcpkix-jdk15on:1.52'
-	compile 'com.auth0:java-jwt:3.3.0'
+    // Common
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+	implementation 'com.google.code.gson:gson:2.8.0'
+	implementation 'org.bouncycastle:bcpkix-jdk15on:1.52'
+	implementation 'com.auth0:java-jwt:3.3.0'
 
-    //tests
-    testCompile 'junit:junit:4.12'
-    testRuntime 'ch.qos.logback:logback-classic:1.2.3'
+    // Tests
+    testImplementation 'junit:junit:4.12'
+    testRuntimeOnly 'ch.qos.logback:logback-classic:1.2.3'
 }
 
-jar {
-    baseName = 'api-javalib'
-    version =  '1.14.1'
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+tasks.named('jar') {
+    archiveBaseName = 'api-javalib'
+    archiveVersion = '1.14.1'
 }
